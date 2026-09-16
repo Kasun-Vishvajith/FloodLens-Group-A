@@ -1,0 +1,227 @@
+[
+  {
+    "id": "hanwella",
+    "name": "Hanwella",
+    "region": "Western",
+    "river": "Kelani vicinity",
+    "lat": 6.909,
+    "lon": 80.081,
+    "district": "Colombo"
+  },
+  {
+    "id": "ratnapura",
+    "name": "Ratnapura",
+    "region": "Sabaragamuwa",
+    "river": "Kalu vicinity",
+    "lat": 6.68,
+    "lon": 80.4,
+    "district": "Ratnapura"
+  },
+  {
+    "id": "baddegama",
+    "name": "Baddegama",
+    "region": "Southern",
+    "river": "Gin vicinity",
+    "lat": 6.17,
+    "lon": 80.18,
+    "district": "Galle"
+  },
+  {
+    "id": "akuressa",
+    "name": "Akuressa",
+    "region": "Southern",
+    "river": "Nilwala vicinity",
+    "lat": 6.096,
+    "lon": 80.477,
+    "district": "Matara"
+  },
+  {
+    "id": "peradeniya",
+    "name": "Peradeniya",
+    "region": "Central",
+    "river": "Mahaweli vicinity",
+    "lat": 7.268,
+    "lon": 80.591,
+    "district": "Kandy"
+  },
+  {
+    "id": "polonnaruwa",
+    "name": "Polonnaruwa",
+    "region": "North Central",
+    "river": "Mahaweli vicinity",
+    "lat": 7.918,
+    "lon": 81.008,
+    "district": "Polonnaruwa"
+  },
+  {
+    "id": "anuradhapura",
+    "name": "Anuradhapura",
+    "region": "North Central",
+    "river": "Malwathu vicinity",
+    "lat": 8.34,
+    "lon": 80.4,
+    "district": "Anuradhapura"
+  },
+  {
+    "id": "chilaw",
+    "name": "Chilaw",
+    "region": "North Western",
+    "river": "Deduru vicinity",
+    "lat": 7.59,
+    "lon": 79.81,
+    "district": "Puttalam"
+  },
+  {
+    "id": "giriulla",
+    "name": "Giriulla",
+    "region": "North Western",
+    "river": "Maha Oya vicinity",
+    "lat": 7.33,
+    "lon": 80.12,
+    "district": "Kurunegala"
+  },
+  {
+    "id": "kumbukkan",
+    "name": "Kumbukkan",
+    "region": "Eastern",
+    "river": "Kumbukkan vicinity",
+    "lat": 6.75,
+    "lon": 81.65,
+    "district": "Ampara"
+  },
+  {
+    "id": "jaffna",
+    "name": "Jaffna",
+    "region": "Northern",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 9.661,
+    "lon": 80.025,
+    "district": "Jaffna"
+  },
+  {
+    "id": "trincomalee",
+    "name": "Trincomalee",
+    "region": "Eastern",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 8.588,
+    "lon": 81.215,
+    "district": "Trincomalee"
+  },
+  {
+    "id": "batticaloa",
+    "name": "Batticaloa",
+    "region": "Eastern",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 7.731,
+    "lon": 81.674,
+    "district": "Batticaloa"
+  },
+  {
+    "id": "nuwaraeliya",
+    "name": "Nuwara Eliya",
+    "region": "Central",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 6.949,
+    "lon": 80.789,
+    "district": "Nuwara Eliya"
+  },
+  {
+    "id": "mannar",
+    "name": "Mannar",
+    "region": "Northern",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 8.981,
+    "lon": 79.904,
+    "district": "Mannar"
+  },
+  {
+    "id": "hambantota",
+    "name": "Hambantota",
+    "region": "Southern",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 6.125,
+    "lon": 81.118,
+    "district": "Hambantota"
+  },
+  {
+    "id": "badulla",
+    "name": "Badulla",
+    "region": "Uva",
+    "river": "Nearby modelled channel (unverified)",
+    "lat": 6.993,
+    "lon": 81.055,
+    "district": "Badulla"
+  },
+  {
+    "id": "kilinochchi",
+    "name": "Kilinochchi",
+    "region": "Northern",
+    "lat": 9.38,
+    "lon": 80.398,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Kilinochchi"
+  },
+  {
+    "id": "mullaitivu",
+    "name": "Mullaitivu",
+    "region": "Northern",
+    "lat": 9.267,
+    "lon": 80.814,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Mullaitivu"
+  },
+  {
+    "id": "vavuniya",
+    "name": "Vavuniya",
+    "region": "Northern",
+    "lat": 8.754,
+    "lon": 80.498,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Vavuniya"
+  },
+  {
+    "id": "monaragala",
+    "name": "Monaragala",
+    "region": "Uva",
+    "lat": 6.872,
+    "lon": 81.35,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Monaragala"
+  },
+  {
+    "id": "gampaha",
+    "name": "Gampaha",
+    "region": "Western",
+    "lat": 7.091,
+    "lon": 79.999,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Gampaha"
+  },
+  {
+    "id": "kalutara",
+    "name": "Kalutara",
+    "region": "Western",
+    "lat": 6.586,
+    "lon": 79.96,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Kalutara"
+  },
+  {
+    "id": "kegalle",
+    "name": "Kegalle",
+    "region": "Sabaragamuwa",
+    "lat": 7.251,
+    "lon": 80.346,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Kegalle"
+  },
+  {
+    "id": "matale",
+    "name": "Matale",
+    "region": "Central",
+    "lat": 7.467,
+    "lon": 80.623,
+    "river": "Nearby modelled channel (unverified)",
+    "district": "Matale"
+  }
+]

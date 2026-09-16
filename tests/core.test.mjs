@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {mean,sum,maximum,severity,episodes,esc,thresholdLevel,snapshotFresh,forecastSignals} from '../dist/core.mjs';
+assert.equal(mean([null,2,4]),3);assert.equal(mean([null]),null);assert.equal(maximum([null]),null);assert.equal(sum([null]),null);
+assert.equal(severity(null),-1);assert.equal(severity(95),1);assert.equal(severity(99),2);
+assert.equal(esc('<b>'),'&lt;b&gt;');
+const ref={n:155,p95:40,p99:80};
+assert.equal(thresholdLevel(null,ref),-1);assert.equal(thresholdLevel(40,ref),1);assert.equal(thresholdLevel(80,ref),2);
+assert.equal(thresholdLevel(100,{...ref,n:4}),-1);assert.equal(thresholdLevel(0,{n:100,p95:0,p99:0}),0);
+const now=Date.parse('2026-09-08T12:00:00Z');assert.equal(snapshotFresh('2026-09-08T08:00:00Z',now),true);assert.equal(snapshotFresh('2026-09-06T08:00:00Z',now),false);
+const weather={daily:{time:['2026-09-08','2026-09-09'],precipitation_sum:[10,90]}};
+const flood={daily:{time:['2026-09-09'],river_discharge_median:[50]}};
+const base={rain:{9:ref},q:{9:ref}};
+let result=forecastSignals(weather,flood,base);assert.equal(result[0].q,null);assert.equal(result[1].rainLevel,2);assert.equal(result[1].flowLevel,1);
+result=forecastSignals(weather,flood,base,{weatherFresh:false,floodFresh:false});assert.ok(result.every(r=>r.level===-1));
+const rows=[98,99,100,80,99].map((p,i)=>({date:`2020-01-0${i+1}`,qp:p,rp:0,q:i+1}));assert.equal(episodes(rows).length,2);
+console.log('PASS: null handling, thresholds, minimum baseline size, stale exclusion, date-aligned API forecasts, episode grouping.');

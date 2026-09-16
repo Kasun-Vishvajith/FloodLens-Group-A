@@ -1,0 +1,23 @@
+{
+  "name": "floodlens-sri-lanka",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Static Sri Lanka flood and extreme-weather analytics dashboard",
+  "scripts": {
+    "test": "node tests/core.test.mjs && node tests/react.test.mjs",
+    "check": "node --check dist/app.js",
+    "build": "node build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.5",
+    "jsdom": "26.1.0"
+  }
+}

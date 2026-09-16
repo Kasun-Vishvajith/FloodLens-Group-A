@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS daily_weather (
+ location_id TEXT NOT NULL, date DATE NOT NULL,
+ rain DOUBLE PRECISION, temp DOUBLE PRECISION, humidity DOUBLE PRECISION,
+ wind DOUBLE PRECISION, pressure DOUBLE PRECISION, tmax DOUBLE PRECISION,
+ q DOUBLE PRECISION, r3 DOUBLE PRECISION, r7 DOUBLE PRECISION,
+ qp DOUBLE PRECISION, rp DOUBLE PRECISION, tp DOUBLE PRECISION, wp DOUBLE PRECISION,
+ severity INTEGER, weather_model TEXT, flow_source TEXT,
+ PRIMARY KEY (location_id,date),
+ CHECK (humidity IS NULL OR humidity BETWEEN 0 AND 100),
+ CHECK (rain IS NULL OR rain >= 0), CHECK (q IS NULL OR q >= 0)
+);
+CREATE INDEX IF NOT EXISTS daily_weather_date_idx ON daily_weather(date);

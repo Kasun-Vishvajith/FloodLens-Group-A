@@ -1,0 +1,225 @@
+{
+  "status": "passed",
+  "archive_start": "2016-01-01",
+  "archive_end": "2026-09-15",
+  "as_of": "2026-09-16",
+  "hourly_rows": 2346600,
+  "daily_rows": 97775,
+  "missing_by_location": {
+    "hanwella": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "ratnapura": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "baddegama": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "akuressa": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "peradeniya": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "polonnaruwa": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "anuradhapura": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "chilaw": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "giriulla": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "kumbukkan": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "jaffna": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "trincomalee": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 3911
+    },
+    "batticaloa": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "nuwaraeliya": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "mannar": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "hambantota": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "badulla": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "kilinochchi": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "mullaitivu": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 3911
+    },
+    "vavuniya": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "monaragala": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "gampaha": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "kalutara": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "kegalle": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    },
+    "matale": {
+      "rain": 0,
+      "temp": 0,
+      "humidity": 0,
+      "wind": 0,
+      "pressure": 0,
+      "q": 0
+    }
+  },
+  "missing_flood_forecast_locations": 2,
+  "map_districts": 25,
+  "checks": [
+    "consecutive dates",
+    "unique keys",
+    "physical ranges",
+    "source labels",
+    "percentile bounds",
+    "forecast location coverage",
+    "district geometry count",
+    "25 unique district reference points",
+    "16 forecast dates",
+    "source rainfall reconciliation",
+    "rolling accumulation reconciliation"
+  ]
+}

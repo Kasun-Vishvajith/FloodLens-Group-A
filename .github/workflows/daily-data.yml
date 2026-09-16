@@ -1,0 +1,53 @@
+name: Update weather archive and API forecasts
+on:
+  schedule:
+    - cron: '35 1 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: floodlens-data
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Collect new history and revise the recent 14 days
+        run: python pipeline/ingest_v2.py
+      - name: Recalculate historical analytics
+        run: python pipeline/analyze.py
+      - name: Retrieve fresh provider forecasts
+        run: python pipeline/refresh_current.py
+      - run: python pipeline/eda.py
+      - name: Check coverage, source labels and physical ranges
+        run: python pipeline/validate_v2.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/core.test.mjs
+      - run: npm ci
+      - run: npm run build
+      - run: node tests/react.test.mjs
+      - name: Save successful update
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist/data data/processed-v2
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update historical archive and API forecasts'
+            git push
+          fi
+      - name: Request Vercel rebuild when a deploy hook is configured
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK" ]; then
+            curl --fail --silent --show-error --request POST "$VERCEL_DEPLOY_HOOK"
+          fi

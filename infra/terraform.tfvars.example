@@ -1,0 +1,6 @@
+region = "ap-south-1"
+bucket_name = "replace-with-a-globally-unique-bucket-name"
+vpc_id = "vpc-REPLACE"
+private_subnet_ids = ["subnet-REPLACE-A", "subnet-REPLACE-B"]
+backend_security_group_id = "sg-REPLACE"
+# Supply TF_VAR_db_password securely in your shell, not this file.

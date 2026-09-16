@@ -1,0 +1,13 @@
+{
+  "hourly_rows": 2343000,
+  "hourly_files": 275,
+  "compression": "zstd",
+  "hourly_partitions": [
+    "district",
+    "year"
+  ],
+  "daily_partitions": [
+    "district"
+  ],
+  "bytes": 31383145
+}

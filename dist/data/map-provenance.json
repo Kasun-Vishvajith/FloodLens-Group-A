@@ -1,0 +1,12 @@
+{
+  "source": "geoBoundaries gbOpen",
+  "boundaryID": "LKA-ADM2-46371173",
+  "representation_year": "2017",
+  "build_date": "2023-12-12",
+  "district_count": 25,
+  "source_url": "https://www.geoboundaries.org/api/current/gbOpen/LKA/ADM2/",
+  "download_url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/LKA/ADM2/geoBoundaries-LKA-ADM2.geojson",
+  "attribution": "OpenStreetMap / Wambacher via geoBoundaries",
+  "licence": "Open Data Commons Open Database License 1.0",
+  "licence_url": "https://www.openstreetmap.org/copyright"
+}
