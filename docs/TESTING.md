@@ -1,21 +1,9 @@
-# Verification and remaining execution gates
+# Testing
 
-Run the checks from the project root:
+Run `npm ci` and then `npm test`. The script builds the site and runs:
 
-```
-npm ci
-npm run build
-npm test
-python pipeline/validate_v2.py
-python tests/backend_test.py
-```
+- `tests/core.test.mjs`: null-safe statistics, threshold levels, stale snapshot exclusion, date-aligned forecast signals, episode grouping, correct ordinal suffixes (`81st`), and logarithmic scatter tick conversion.
+- `tests/react.test.mjs`: 25-location × route rendering, EDA and global explorer mounting, invalid date rejection, real-map fallback, filter scope, export scope, forecast date/month transitions, null gaps and unavailable flow handling.
+- `python -m unittest discover -s tests -p '*_test.py'`: percentile tie handling, minimum sample policy, rolling windows, score weights, provider timestamp preservation, complete-day aggregation, and atomic release promotion.
 
-The Node tests cover analytical edge cases and DOM integration with the real React bundle and packaged data. Backend tests start a real local HTTP server and check historical filtering, coordinate validation, unknown locations, compact response schema and the asset allowlist. Dataset validation checks date continuity, unique keys, physical ranges, missingness and provenance labels.
-
-These are not visual browser tests. The available supervised browser preview does not support this project's static development setup; layout and live GPS permissions must also be checked in your own browser. Manual acceptance: open each view on desktop/mobile, change district/date/metric, zoom the map, replay an event, export CSV, search a global location, reject GPS permission once, and confirm graceful handling of a failed provider request.
-
-The local Spark check additionally executes the notebook with Java 17 / Spark 3.5.6 and compares 13 analytical fields against the dashboard across every daily key (`python tests/reconcile_spark.py`). Rainfall is rounded to six decimal places before rank calculations to prevent floating-point artefacts from breaking ties.
-
-Cloud checks require the team's accounts: Terraform validate/plan, an actual Spark notebook run, S3 upload, PostgreSQL upsert and API queries against RDS. Do not mark these as passed until executed. Preserve actual job logs and screenshots for the report. Confirm the daily GitHub Actions workflow and Vercel rebuild once configured.
-
-`dist/data/validation.json` records the bundled dataset's measured verification results. `VALIDATION_RESULTS.txt` records the completed local release checks.
+`python pipeline/update.py --offline` is an end-to-end data gate. It rebuilds 97,775 daily rows in the bundled release, regenerates EDA and baselines, and runs the independent validator. Network availability is not required for this gate.

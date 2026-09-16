@@ -1,13 +1,14 @@
 {
   "name": "floodlens-sri-lanka",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
-  "description": "Static Sri Lanka flood and extreme-weather analytics dashboard",
+  "description": "Sri Lanka flood and extreme-weather analytics — Vercel + GitHub Actions",
   "scripts": {
-    "test": "node tests/core.test.mjs && node tests/react.test.mjs",
-    "check": "node --check dist/app.js",
-    "build": "node build.mjs"
+    "build": "node scripts/build.mjs",
+    "test": "npm run build && node tests/core.test.mjs && node tests/react.test.mjs",
+    "check": "node --check src/app.js",
+    "start": "python serve.py"
   },
   "engines": {
     "node": ">=18"

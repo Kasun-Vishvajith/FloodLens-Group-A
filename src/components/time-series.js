@@ -1,0 +1,20 @@
+import {finite, fmt, esc} from '../lib/analytics.js';
+export function chart(series,{unit='',bars=false,height=220,labels=true,threshold=null,allDates=series.some(s=>/forecast/i.test(s.name))}={}){
+ const vals=series.flatMap(s=>s.points.map(p=>p.v)).filter(finite);if(finite(threshold))vals.push(threshold);
+ if(!vals.length)return `<p class="small-note">No values available for this chart.</p>`;
+ const count=Math.max(...series.map(s=>s.points.length));if(allDates)height=Math.max(height,290);const width=allDates?Math.max(640,count*48+90):640,l=53,r=allDates?26:12,t=allDates?30:18,b=allDates?74:34,iw=width-l-r,ih=height-t-b;let lo=Math.min(0,...vals),hi=Math.max(...vals);if(hi===lo)hi=lo+1;
+ const n=Math.max(...series.map(s=>s.points.length));const x=i=>l+(n===1?iw/2:i*iw/(n-1)),y=v=>t+ih-(v-lo)/(hi-lo)*ih;
+ let svg=`<svg class="chart" role="img" aria-label="${esc(series.map(s=>s.name).join(', '))} in ${esc(unit)}" viewBox="0 0 ${width} ${height}"><title>${esc(series.map(s=>s.name).join(', '))} (${esc(unit)})</title>`;
+ for(let k=0;k<=4;k++){const v=lo+(hi-lo)*k/4;svg+=`<line class="grid" x1="${l}" x2="${width-r}" y1="${y(v)}" y2="${y(v)}"/><text x="${l-10}" y="${y(v)+4}" text-anchor="end">${fmt(v,hi>100?0:1)}</text>`;}
+ svg+=`<text x="${l}" y="12">${esc(unit)}</text>`;
+ series.forEach((s,si)=>{
+  const color=s.color||['#11868a','#e1a651','#608fc7'][si%3];
+  if(bars){s.points.forEach((p,i)=>{if(finite(p.v))svg+=`<rect x="${x(i)-Math.min(18,iw/Math.max(n,1)*.3)}" y="${Math.min(y(p.v),y(0))}" width="${Math.min(36,iw/Math.max(n,1)*.6)}" height="${Math.abs(y(p.v)-y(0))}" rx="2" fill="${color}" opacity=".85"><title>${esc(p.d)}: ${fmt(p.v)} ${unit}</title></rect>`;});}
+  else {let path='',open=false;s.points.forEach((p,i)=>{if(!finite(p.v)){open=false;return;}path+=`${open?'L':'M'}${x(i).toFixed(1)},${y(p.v).toFixed(1)} `;open=true;});svg+=`<path d="${path}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linejoin="round" ${s.dashed?'stroke-dasharray="5 4"':''}/>`;}
+  if(!bars&&!s.dashed)s.points.forEach((p,i)=>{if(!finite(p.v))return;svg+=`<g class="${allDates?'forecast-point':'data-point'}" tabindex="0" role="img" aria-label="${esc(s.name)}: ${esc(p.d)}, ${fmt(p.v)} ${esc(unit)}"><title>${esc(s.name)} · ${esc(p.d)}: ${fmt(p.v)} ${esc(unit)}</title><circle cx="${x(i)}" cy="${y(p.v)}" r="4" fill="${color}" stroke="white" stroke-width="2"/>${allDates&&si===0?`<text class="point-value" x="${x(i)}" y="${y(p.v)-10}" text-anchor="middle">${fmt(p.v)}</text>`:''}</g>`;});
+ });
+ if(finite(threshold))svg+=`<line x1="${l}" x2="${width-r}" y1="${y(threshold)}" y2="${y(threshold)}" stroke="#c95645" stroke-dasharray="4 4"/>`;
+ if(labels&&allDates){const dates=series[0].points;dates.forEach((p,i)=>{const prev=dates[i-1]?.d;const parts=p.d.split('-');const newYear=!prev||prev.slice(0,4)!==parts[0],newMonth=newYear||prev.slice(0,7)!==p.d.slice(0,7);const month=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(parts[1])-1];svg+=`<text class="forecast-date" x="${x(i)}" y="${height-b+22}" text-anchor="middle"><tspan x="${x(i)}">${esc(parts[2])}</tspan>${newMonth?`<tspan x="${x(i)}" dy="17">${month}</tspan>`:''}${newYear?`<tspan x="${x(i)}" dy="17">${esc(parts[0])}</tspan>`:''}</text>`;});}
+ if(labels&&!allDates){const points=series[0].points;for(const i of [...new Set([0,Math.floor((n-1)/3),Math.floor(2*(n-1)/3),n-1])]){const d=points[i]?.d||'';svg+=`<text x="${x(i)}" y="${height-9}" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${esc(d.length===10?d.slice(2):d)}</text>`;}}
+ return (allDates?'<div class="forecast-chart-scroll" tabindex="0" role="region" aria-label="Daily forecast chart; scroll horizontally to see every date">':'')+svg+'</svg>'+(allDates?'</div><p class="small-note">Each point shows its value. Dates are UTC; month and year appear when they change. Scroll horizontally for all dates.</p>':'')+`<div class="legend">${series.map((s,i)=>`<span><i style="background:${s.color||['#11868a','#e1a651','#608fc7'][i%3]}"></i>${esc(s.name)}</span>`).join('')}</div>`;
+}

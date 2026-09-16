@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mean,sum,maximum,severity,episodes,esc,thresholdLevel,snapshotFresh,forecastSignals} from '../dist/core.mjs';
+import {mean,sum,maximum,severity,episodes,esc,thresholdLevel,snapshotFresh,forecastSignals} from '../src/lib/analytics.js';
 assert.equal(mean([null,2,4]),3);assert.equal(mean([null]),null);assert.equal(maximum([null]),null);assert.equal(sum([null]),null);
 assert.equal(severity(null),-1);assert.equal(severity(95),1);assert.equal(severity(99),2);
 assert.equal(esc('<b>'),'&lt;b&gt;');
@@ -14,3 +14,10 @@ let result=forecastSignals(weather,flood,base);assert.equal(result[0].q,null);as
 result=forecastSignals(weather,flood,base,{weatherFresh:false,floodFresh:false});assert.ok(result.every(r=>r.level===-1));
 const rows=[98,99,100,80,99].map((p,i)=>({date:`2020-01-0${i+1}`,qp:p,rp:0,q:i+1}));assert.equal(episodes(rows).length,2);
 console.log('PASS: null handling, thresholds, minimum baseline size, stale exclusion, date-aligned API forecasts, episode grouping.');
+
+const {ordinal,logTick}=await import('../src/lib/analytics.js');
+assert.deepEqual([1,2,3,4,11,12,13,21,81,82,83,111].map(ordinal),['1st','2nd','3rd','4th','11th','12th','13th','21st','81st','82nd','83rd','111th']);
+assert(Math.abs(logTick(1000,1)-1000)<1e-8);
+assert.equal(logTick(1000,0),0);
+assert(Number.isFinite(logTick(10000,.5)));
+console.log('PASS: correct ordinal suffixes and inverse logarithmic axis labels');

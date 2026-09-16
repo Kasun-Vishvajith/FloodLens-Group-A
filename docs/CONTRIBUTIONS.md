@@ -1,15 +1,5 @@
-# Group A — individual contribution record
+# Contributions
 
-These are suggested responsibilities, not claims that work has already been performed. Replace the proposed assignments with the team's actual contribution evidence.
+The project group is Kasun Vishvajith, Akindu Liyanage and Yasuri Fernando. Suggested evidence for the final report is one short contribution log per member: ingestion/provider client, processing and analytical definitions, frontend/map/EDA, testing/documentation, and presentation/deployment setup. Keep the actual names and dates agreed by the group; this file does not invent time spent by a person.
 
-| Member | Suggested responsibility | Evidence to record |
-|---|---|---|
-| Kasun Vishvajith | API ingestion, Parquet/Spark pipeline, cloud configuration | Commits, source checks, pipeline runs, row and missingness reconciliation |
-| Akindu Liyanage | EDA, monsoon comparisons, anomaly methodology, report | Verified charts, event case study, methodology decisions, limitations |
-| Yasuri Fernando | React/FastAPI integration, map, deployment, demonstration | Commits, API tests, deployment URL, interaction checks, presentation |
-
-Add registration numbers. Each member should explain one design decision, one problem solved and one limitation. Cross-review another member's component and follow the course's AI-assistance disclosure policy.
-
-| Date | Member | Work actually completed | Evidence / commit | Peer review |
-|---|---|---|---|---|
-| | | | | |
+For a change, describe the user problem, the file(s) changed, the test command and any data-release effect. Never commit API keys: Open-Meteo endpoints used here are key-free. Keep generated `node_modules/`, temporary refresh directories, locks and raw request caches out of the repository.

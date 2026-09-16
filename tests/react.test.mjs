@@ -7,7 +7,7 @@ const dom=new JSDOM(await readFile(new URL('../dist/index.html',import.meta.url)
 for(const k of ['window','document','navigator','location','localStorage','HTMLElement','Node','Event','MouseEvent'])Object.defineProperty(globalThis,k,{value:dom.window[k],configurable:true});
 window.HTMLDialogElement.prototype.showModal=function(){this.open=true};window.HTMLDialogElement.prototype.close=function(){this.open=false};
 globalThis.fetch=async url=>{const path=String(url);if(!path.startsWith('data/'))throw Error('Network unavailable in test');const body=await readFile(new URL('../dist/'+path,import.meta.url),'utf8');return {ok:true,json:async()=>JSON.parse(body)}};
-const app=await import('../dist/app.js');await app.ready;
+const app=await import('../node_modules/.cache/floodlens-test.mjs');await app.ready;
 assert.match(document.getElementById('page-title').textContent,/Sri Lanka/);
 const summary=JSON.parse(await readFile(new URL('../dist/data/summary.json',import.meta.url),'utf8'));
 let combinations=0;
