@@ -17,6 +17,13 @@ app.navigate('history');document.getElementById('start-date').value='2010-01-01'
 app.navigate('analysis');await new Promise(r=>setTimeout(r,100));assert.match(document.getElementById('content').textContent,/Correlation matrix/);assert.match(document.getElementById('content').textContent,/Monsoon comparison/);
 app.navigate('weather');assert.match(document.getElementById('content').textContent,/Global weather & river explorer/);assert.equal(document.querySelector('#content > .card h2').textContent,'Global weather & river explorer');assert(!document.getElementById('content').textContent.includes('Find a place in Sri Lanka'));assert.match(document.getElementById('content').textContent,/Use my GPS/);const inputs=[...document.querySelectorAll('#content input[type=number]')];inputs[0].value='100';inputs[0].dispatchEvent(new Event('input',{bubbles:true}));
 assert.equal(document.querySelectorAll('#content input[type=number]').length,2);
+const forecastDates=Array.from({length:16},(_,i)=>`2026-09-${String(17+i).padStart(2,'0')}`);
+const sampleWeather={current:{temperature_2m:25.3,relative_humidity_2m:91,wind_speed_10m:9.2,pressure_msl:1012.9},daily:{time:forecastDates,precipitation_sum:forecastDates.map(()=>60),temperature_2m_min:forecastDates.map(()=>24),temperature_2m_max:forecastDates.map(()=>30),wind_speed_10m_max:forecastDates.map(()=>20)}};
+const sampleFlood={daily:{time:forecastDates,river_discharge_median:forecastDates.map(()=>220),river_discharge_p25:forecastDates.map(()=>180),river_discharge_p75:forecastDates.map(()=>280)}};
+const dataFetch=globalThis.fetch;
+globalThis.fetch=async url=>{const path=String(url);if(path.includes('geocoding-api.open-meteo.com'))return {ok:true,json:async()=>({results:[{id:9001,name:'Borella',country:'Sri Lanka',country_code:'LK',admin1:'Western',admin2:'Colombo District',latitude:6.91,longitude:79.88}]})};if(path.includes('api.open-meteo.com/v1/forecast'))return {ok:true,json:async()=>sampleWeather};if(path.includes('flood-api.open-meteo.com'))return {ok:true,json:async()=>sampleFlood};if(path.includes('api.open-meteo.com/v1/elevation'))return {ok:true,json:async()=>({elevation:[4]})};return dataFetch(url)};
+const placeInput=[...document.querySelectorAll('#content input')].find(input=>input.type==='text');const inputSetter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set;inputSetter.call(placeInput,'Borella');placeInput.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#content button.button').click();await new Promise(r=>setTimeout(r,0));document.querySelector('.search-results .chip').click();await new Promise(r=>setTimeout(r,20));const borellaForecast=document.getElementById('content').textContent;assert.match(borellaForecast,/Borella/);assert.match(borellaForecast,/Colombo district values/);assert.match(borellaForecast,/District signal/);assert(!borellaForecast.includes('Hanwella · saved forecast days'));
+globalThis.fetch=dataFetch;
 app.navigate('overview');assert.match(document.getElementById('content').innerHTML,/geographic-fallback/);
 console.log(`PASS: ${combinations} location/view renders, React EDA/integrated explorer mounting, invalid dates, geographic fallback`);
 assert.equal(document.querySelectorAll('#global-filters').length,1);
@@ -42,4 +49,3 @@ assert.deepEqual([...plotted.querySelectorAll('.forecast-date')].map(e=>[...e.ch
 assert.match(plotted.querySelector('.forecast-point').getAttribute('aria-label'),/2026-12-30, 0\.0 mm/);
 console.log('PASS: every forecast date, month/year transitions, zero marker and null gap');
 dom.window.close();
-

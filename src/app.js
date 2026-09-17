@@ -8,7 +8,7 @@ const routes=[['overview','Overview','grid'],['weather','Current & forecast','cl
 const icons={grid:'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z',cloud:'M7 18a5 5 0 1 1 1-10 6 6 0 0 1 11 4 3 3 0 0 1-1 6H7',chart:'M3 3v18h18 M6 15l4-5 4 3 6-8',water:'M2 8q3-3 6 0t6 0t6 0 M2 14q3-3 6 0t6 0t6 0 M2 20q3-3 6 0t6 0t6 0',play:'M8 5l11 7-11 7z',model:'M4 8h16v12H4z M8 8V4h8v4 M8 12v3 M16 12v3 M9 18h6',database:'M3 5c0-4 18-4 18 0s-18 4-18 0v14c0 4 18 4 18 0V5 M3 12c0 4 18 4 18 0'};
 const titles={analysis:['Exploratory analysis','Distributions, correlations, monsoon comparisons and unusual conditions across all 25 districts.'],overview:['Sri Lanka weather & flood overview','Explore historical conditions on the map, then check the API forecast for what comes next.'],weather:['Current weather & 16-day forecast','Search any place worldwide, then compare its provider forecast with the selected Sri Lankan monitoring location.'],history:['Historical weather explorer','Explore historical weather, seasonality and differences across locations.'],flood:['Flood indicators & priority locations','Compare modelled discharge, accumulated rainfall and seasonal baselines.'],events:['Extreme weather events','Replay automatically identified episodes, one day at a time.'],quality:['Data, methods & project guide','Data coverage, reproducibility, methodology and team handover.']};
 const colors=['#258d7d','#c48a22','#c95645'];
-let state={route:'overview',loc:'hanwella',start:'2026-06-01',end:'2026-09-07',mapMode:'history',metric:'rain',eventIndex:0,eventDay:0,eventKind:'flood',live:null,liveError:'',playing:false};
+let state={route:'overview',loc:'hanwella',start:'2026-06-01',end:'2026-09-07',mapMode:'history',metric:'rain',eventIndex:0,eventDay:0,eventKind:'flood',live:null,liveError:'',playing:false,explorerPlace:null};
 let summary,geo,baselines,lags,data={},playTimer,renderToken=0;
 const loc=()=>summary.locations.find(x=>x.id===state.loc)||summary.locations[0];
 const allRows=(id=state.loc)=>data[id]||[];
@@ -101,6 +101,7 @@ function weather(){
  const stamp=state.live?.weather_at?.[state.loc]||state.live?.retrieved_at,fs=state.live?.flood_at?.[state.loc]||state.live?.retrieved_at;
  const fresh=snapshotFresh(stamp),flowFresh=snapshotFresh(fs);
  let body='';
+ if(state.explorerPlace)return '';
  if(!d)return empty('Forecast unavailable','Use Refresh weather to request the latest API forecast. Historical analysis remains available.');
  const signals=forecastRows(),maxLevel=signals.length?Math.max(...signals.map(r=>r.level)):-1;
  body+=`<div class="source-banner ${fresh?'':'stale'}"><span><strong>${fresh?'Recently retrieved forecast':'Stale forecast — refresh before interpreting'}</strong> · retrieved ${esc(new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Colombo'}))} Sri Lanka time</span><span>Daily comparisons use UTC dates</span></div>${state.liveError?`<p class="notice">${esc(state.liveError)}</p>`:''}
@@ -114,33 +115,36 @@ function weather(){
 }
 function render(){
  if(!summary)return;document.body.dataset.view=state.route;const guide=$('page-guide');if(guide)guide.innerHTML=pageGuides[state.route].map(([title,body])=>`<dt>${esc(title)}</dt><dd>${esc(body)}</dd>`).join('');if(activeMap){activeMap.remove();activeMap=null;}renderToken++;$('breadcrumb').textContent=routes.find(r=>r[0]===state.route)?.[1]||'Overview';$('page-title').textContent=titles[state.route][0];$('page-description').textContent=titles[state.route][1];
+ const explorerActive=state.route==='weather'&&state.explorerPlace;
  $('navigation').innerHTML=routes.map(([id,name,i])=>`<button class="nav-button ${state.route===id?'active':''}" data-route="${id}" ${state.route===id?'aria-current="page"':''}>${icon(i)}${name}</button>`).join('');
  $('location').value=state.loc;$('archive-status').textContent=`Archive: ${dateLabel(summary.start)} – ${dateLabel(summary.end)} · build ${dateLabel(summary.as_of)}`;$('coverage').textContent=state.route==='weather'?'API forecasts · UTC days':state.route==='analysis'?'Full available archive':state.route==='events'?'Episodes since 2016':`${fmt(rows().length,0)} daily records · UTC`;
  const context=$('global-context');if(context){
    const selected=loc(),independent=state.route==='quality';
   const period=state.route==='weather'?'Provider forecast':state.route==='analysis'?'Full archive':state.route==='events'?'Historical episodes':`${dateLabel(state.start)} – ${dateLabel(state.end)}`;
-   context.textContent=independent?'Saved selection · '+selected.district+' / '+selected.name:`${selected.district} / ${selected.name} · ${period}`;
-   $('filter-scope').textContent=independent?'This selection is saved for the district pages. The project guide covers the whole dataset.':state.route==='weather'?'The explorer below can search any place worldwide; the selected Sri Lankan location is used for the saved forecast and historical comparison.':state.route==='analysis'?'Choose a reference location. Analysis always uses the full available archive.':state.route==='events'?'Choose a reference location, then select an episode on this page. The archive date range does not apply.':'Applies to Overview, Historical explorer and Flood indicators. Each district uses one reference location, not a district-wide average.';
+   context.textContent=independent?'Saved selection · '+selected.district+' / '+selected.name:explorerActive?`${state.explorerPlace.name} · Global provider forecast`:`${selected.district} / ${selected.name} · ${period}`;
+   $('filter-scope').textContent=independent?'This selection is saved for the district pages. The project guide covers the whole dataset.':state.route==='weather'?(explorerActive?'The searched place is active above. Sri Lankan places use their matching district reference for unusual-signal comparisons.':'Search any place worldwide above; the selected Sri Lankan location is used until a global forecast is loaded.') :state.route==='analysis'?'Choose a reference location. Analysis always uses the full available archive.':state.route==='events'?'Choose a reference location, then select an episode on this page. The archive date range does not apply.':'Applies to Overview, Historical explorer and Flood indicators. Each district uses one reference location, not a district-wide average.';
  }
- const view=({overview,weather,history,flood,events,quality}[state.route]);mountView($('content'),{route:state.route,html:view?view()+(state.route==='flood'?`<div class="section-space">${regionalFloodTable()}</div>`:''):'',summary,location:state.loc,onLocation:selectLocation});
- const forecastPage=state.route==='weather',forecastAvailable=!!state.live?.weather?.[state.loc]?.daily;
- const recent=snapshotFresh(state.live?.weather_at?.[state.loc]||state.live?.retrieved_at);
-  $('data-badge').textContent=forecastPage?(forecastAvailable?(recent?'Forecast · recently retrieved':'Stale forecast · refresh needed'):'Forecast unavailable'):'Historical model data';
+ const view=({overview,weather,history,flood,events,quality}[state.route]);mountView($('content'),{route:state.route,html:view?view()+(state.route==='flood'?`<div class="section-space">${regionalFloodTable()}</div>`:''):'',summary,baselines,location:state.loc,onLocation:selectLocation,onExplorerPlace:setExplorerPlace});
+ const forecastPage=state.route==='weather',forecastAvailable=explorerActive?!!state.explorerPlace.weather?.daily:!!state.live?.weather?.[state.loc]?.daily;
+ const recent=explorerActive?true:snapshotFresh(state.live?.weather_at?.[state.loc]||state.live?.retrieved_at);
+  $('data-badge').textContent=forecastPage?(forecastAvailable?(explorerActive?'Global forecast · recently retrieved':recent?'Forecast · recently retrieved':'Stale forecast · refresh needed'):'Forecast unavailable'):'Historical model data';
  $('data-badge').classList.toggle('stale',forecastPage&&!recent);
   $('location-context').hidden=state.route==='quality';
- $('location-context').textContent=`${loc().district} district · ${loc().name} reference location. One sampled coordinate, not a district average.${loc().valid_q>0?'':' River-flow history is unavailable at this point; weather remains available.'}`;
+  $('location-context').textContent=explorerActive?`${state.explorerPlace.name} global forecast is active. Sri Lankan district comparison is shown only when a matching reference exists.`:`${loc().district} district · ${loc().name} reference location. One sampled coordinate, not a district average.${loc().valid_q>0?'':' River-flow history is unavailable at this point; weather remains available.'}`;
   const supported=!['quality','events'].includes(state.route);
  $('export').hidden=!supported;$('export-context').hidden=!supported;
- $('export').textContent=forecastPage?'↓ Export forecast CSV':'↓ Export history CSV';
- const exportDates=forecastPage?forecastRows().map(r=>r.date):(state.route==='analysis'?allRows():rows()).map(r=>r.date);
+ $('export').textContent=forecastPage?(explorerActive?'↓ Export selected forecast CSV':'↓ Export forecast CSV'):'↓ Export history CSV';
+ const exportDates=forecastPage?(explorerActive?forecastSignals(state.explorerPlace.weather,state.explorerPlace.flood,null):forecastRows()).map(r=>r.date):(state.route==='analysis'?allRows():rows()).map(r=>r.date);
  $('export').disabled=!exportDates.length;
- $('export-context').textContent=exportDates.length?`CSV: ${loc().name} · ${dateLabel(exportDates[0])} – ${dateLabel(exportDates.at(-1))} · ${exportDates.length} daily records · ${forecastPage?'provider forecast':'historical weather and flow; not an analysis report'}. Missing values stay blank.`:'No records to export for this selection.';
+ const exportDescription=forecastPage?(explorerActive?'global provider forecast':'provider forecast'):'historical weather and flow; not an analysis report';
+ $('export-context').textContent=exportDates.length?`CSV: ${explorerActive?state.explorerPlace.name:loc().name} · ${dateLabel(exportDates[0])} – ${dateLabel(exportDates.at(-1))} · ${exportDates.length} daily records · ${exportDescription}. Missing values stay blank.`:'No records to export for this selection.';
  $('export').setAttribute('aria-describedby','export-context');
  $('date-presets').hidden=state.route==='weather'||state.route==='events'||state.route==='quality';
  $('start-date').disabled=state.route==='weather'||state.route==='events'||state.route==='quality';$('end-date').disabled=$('start-date').disabled;$('apply-dates').disabled=$('start-date').disabled;
  bindLocal();mountMap();
 }
-function navigate(route){if(!titles[route])return;stopReplay();state.route=route;location.hash=route;render();}
+function navigate(route){if(!titles[route])return;stopReplay();if(route!=='weather')state.explorerPlace=null;state.route=route;location.hash=route;render();}
+function setExplorerPlace(place){if(state.explorerPlace===place)return;state.explorerPlace=place;if(state.route==='weather')render();}
 let feedbackTimer;
 function confirmUpdate(){
  const feedback=$('update-feedback');if(!feedback)return;
@@ -150,7 +154,7 @@ function confirmUpdate(){
  if(!globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches&&$('content').animate)$('content').animate([{opacity:.55},{opacity:1}],{duration:220});
  feedbackTimer=setTimeout(()=>{feedback.hidden=true},5000);
 }
-function selectLocation(id){if(!summary.locations.some(l=>l.id===id))return;stopReplay();state.loc=id;state.eventIndex=0;state.eventDay=0;render();confirmUpdate();}
+function selectLocation(id){if(!summary.locations.some(l=>l.id===id))return;stopReplay();state.loc=id;state.explorerPlace=null;state.eventIndex=0;state.eventDay=0;render();confirmUpdate();}
 function stopReplay(){clearInterval(playTimer);state.playing=false;}
 function bindLocal(){
  $('event-select')?.addEventListener('change',e=>{stopReplay();state.eventIndex=Number(e.target.value);state.eventDay=0;render();});
@@ -177,9 +181,10 @@ function methodHTML(){return `<p>Historical analysis covers ${dateLabel(summary.
 function exportCSV(){
  let headers,values;
  if(state.route==='weather'){
-  const d=state.live?.weather?.[state.loc]?.daily;if(!d){notice('Load a forecast before exporting.');return;}
+  const explorer=state.explorerPlace,d=explorer?.weather?.daily||state.live?.weather?.[state.loc]?.daily;if(!d){notice('Load a forecast before exporting.');return;}
   headers=['date_utc','location','rain_mm','flow_m3s','flow_p25','flow_p75','rain_signal','flow_signal','weather_retrieved_utc','flood_retrieved_utc'];
-  values=forecastRows().map(r=>[r.date,loc().name,r.rain,r.q,r.p25,r.p75,r.rainLevel,r.flowLevel,state.live.weather_at?.[state.loc],state.live.flood_at?.[state.loc]]);
+  const forecast=explorer?forecastSignals(explorer.weather,explorer.flood,null):forecastRows();
+  values=forecast.map(r=>[r.date,explorer?.name||loc().name,r.rain,r.q,r.p25,r.p75,r.rainLevel,r.flowLevel,explorer?.retrieved||state.live.weather_at?.[state.loc],explorer?.retrieved||state.live.flood_at?.[state.loc]]);
  }else{headers=['date','location_id','rain','temp','humidity','wind','pressure','tmax','q','r3','r7','qp','rp','tp','wp','severity','weather_model','flow_source'];values=(state.route==='analysis'?allRows():rows()).map(r=>headers.map(k=>k==='location_id'?state.loc:r[k]));}
  if(!values.length){notice('No records are available for this export. Try another date range or refresh the forecast.');return;}
  const quote=v=>`"${String(v??'').replace(/"/g,'""')}"`;const csv=[headers,...values].map(r=>r.map(quote).join(',')).join('\r\n');
