@@ -202,7 +202,7 @@ async function init(){try{[summary,geo,baselines,lags]=await Promise.all(['summa
  }}
 }catch{try{state.live=JSON.parse(localStorage.getItem('floodlens-live-v2'));}catch{state.live=null;}}
 
- $('location').innerHTML=summary.locations.map(l=>`<option value="${l.id}">${esc(l.district||l.region)} · ${esc(l.name)}${l.river?' · river':''}</option>`).join('');for(const id of ['start-date','end-date']){$(id).min=summary.start;$(id).max=summary.end;}state.end=summary.end;state.start=new Date(Date.parse(summary.end+'T00:00:00Z')-89*86400000).toISOString().slice(0,10);$('start-date').value=state.start;$('end-date').value=state.end;if(titles[location.hash.slice(1)])state.route=location.hash.slice(1);render();
+ $('location').innerHTML=summary.locations.map(l=>`<option value="${l.id}">${esc(l.district||l.region)} · ${esc(l.name)}</option>`).join('');for(const id of ['start-date','end-date']){$(id).min=summary.start;$(id).max=summary.end;}state.end=summary.end;state.start=new Date(Date.parse(summary.end+'T00:00:00Z')-89*86400000).toISOString().slice(0,10);$('start-date').value=state.start;$('end-date').value=state.end;if(titles[location.hash.slice(1)])state.route=location.hash.slice(1);render();
 }catch(e){$('content').innerHTML=empty('The dataset could not load','Serve this project using START_WINDOWS.bat or python serve.py. Opening index.html directly does not support the data requests. If hosted, reload or contact the project owner.');$('data-badge').textContent='Dataset unavailable';console.error(e);}}
 const ready=init();
 export {chart,ready,state,render,overview,weather,history,flood,events,quality,selectLocation,navigate};
