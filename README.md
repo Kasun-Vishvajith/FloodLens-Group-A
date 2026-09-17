@@ -72,7 +72,7 @@ Detailed definitions are documented in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.
 | --- | --- |
 | `src/` | Frontend source, routes, React views, charts, analytics helpers, API cache, and styles. |
 | `src/pages/Analysis.jsx` | Exploratory analysis page and chart panels. |
-| `src/pages/Explorer.jsx` | Location search, coordinates, and forecast explorer. |
+| `src/pages/Explorer.jsx` | Global location search, coordinates, and forecast explorer embedded at the top of Current & forecast. |
 | `src/components/` | Reusable chart and time-series components. |
 | `src/lib/` | Shared browser analytics, API, and page-guide utilities. |
 | `public/data/` | Versioned browser data release consumed by the application. |

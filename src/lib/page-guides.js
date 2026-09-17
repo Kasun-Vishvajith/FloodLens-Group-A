@@ -6,7 +6,8 @@ export const pageGuides={
   ['The signal behind the status','This panel explains which weather or river measure stands out. Longer bars mean a more unusual value for that location and season, not a higher flood probability.']
  ],
  weather:[
-  ['Location & freshness','Choose a reference location or search for a town. Check the retrieval banner first; use Refresh weather if the saved forecast is stale. The historical date filter does not apply.'],
+  ['Global explorer','At the top of this page, search any place worldwide, use GPS, enter coordinates or click the map. Select Global view to search beyond Sri Lanka, then Load location to retrieve weather, river-flow and elevation forecasts.'],
+  ['Location & freshness','The saved Sri Lankan forecast below follows the shared location selector. Check the retrieval banner first; use Refresh weather if it is stale. The historical date filter does not apply.'],
   ['Cards & daily outlook','The top cards show current or saved conditions and total forecast rain. The day cards show temperature, rain and wind; scroll sideways to see every day.'],
   ['Forecast rainfall','Dates run left to right; height shows rain in millimetres. Dots and numbers show each day’s forecast. The dashed line is a historical comparison level, not another forecast.'],
   ['River-discharge outlook','The solid line shows the middle river-flow forecast; dashed lines show the spread between model members. Higher values mean more water passing per second, not flood depth. Read the signal summary alongside these charts.']
@@ -33,12 +34,6 @@ export const pageGuides={
   ['Distribution & summary','Choose a location and variable. This page uses the full archive. Each bar counts days within a value range; longer bars show the most common conditions. The table summarises typical values and variation.'],
   ['Correlation matrix','Find two variables where their row and column meet. Values near +1 mean they tend to rise together, near −1 mean opposite movement, and near 0 mean little straight-line relationship. This does not establish cause.'],
   ['Monsoons & years','Compare average daily conditions between seasons. In the yearly table, compare rates as well as counts because partial years contain fewer days.'],
- ],
- explore:[
-  ['Find a place','Search for a town, use GPS, or enter coordinates. Enable Global view to search beyond Sri Lanka. This page uses its own location instead of the shared district selection.'],
-  ['Use the map','Click the map to fill in latitude and longitude, then press Load location. Moving the map by itself does not retrieve new data.'],
-  ['Read the results','After loading, cards show current provider conditions and elevation. The table lists each date’s rain, temperatures, wind and river flow; scroll sideways for extra columns.'],
-  ['Unavailable results','Some providers or river grid points may have no values. A dash means unavailable, not zero. If GPS is denied, search or enter coordinates instead.']
  ],
  quality:[
   ['Coverage cards','The top cards show archive size, dates, weather completeness and how many reference points have river data. This page describes the whole project, not the selected location.'],

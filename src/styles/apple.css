@@ -88,9 +88,9 @@ dialog{background:rgba(255,255,255,.96);backdrop-filter:blur(30px);border:1px so
 .global-filters[open]>summary{border-bottom:1px solid var(--line)}
 .global-filters .filter-panel{display:block;margin:0;border:0;border-radius:0;box-shadow:none}
 .global-filters .filter-scope{font-size:.75rem;margin:0;padding:1rem 1.25rem 0;color:#64646b;line-height:1.6}
-body[data-view=explore] .global-filters .filter-panel,body[data-view=quality] .global-filters .filter-panel{display:block}
-body[data-view=explore] .global-filters .filterbar,body[data-view=quality] .global-filters .filterbar{grid-template-columns:minmax(0,1fr)}
-body[data-view=explore] .global-filters .filterbar>label:not(:first-child),body[data-view=quality] .global-filters .filterbar>label:not(:first-child),body[data-view=explore] .global-filters #apply-dates,body[data-view=quality] .global-filters #apply-dates,body[data-view=explore] .global-filters #date-presets,body[data-view=quality] .global-filters #coverage,body[data-view=explore] .global-filters #coverage{display:none}
+body[data-view=quality] .global-filters .filter-panel{display:block}
+body[data-view=quality] .global-filters .filterbar{grid-template-columns:minmax(0,1fr)}
+body[data-view=quality] .global-filters .filterbar>label:not(:first-child),body[data-view=quality] .global-filters #apply-dates,body[data-view=quality] .global-filters #date-presets,body[data-view=quality] .global-filters #coverage{display:none}
 @media(max-width:1150px){.global-filters{margin-inline:1.5rem}}
 @media(max-width:760px){.global-filters{margin-inline:1rem}.global-filters>summary{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2rem .7rem;padding:.8rem 1rem}.context-label{grid-column:1}.context-value{grid-row:2;grid-column:1}.context-action{grid-column:2;grid-row:1/3}.global-filters .filter-scope{padding:1rem 1rem 0}}
 @media print{.global-filters{display:none}}
