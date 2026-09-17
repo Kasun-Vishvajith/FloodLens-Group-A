@@ -33,6 +33,48 @@ function scheduleHints(){if(!scheduled){scheduled=true;requestAnimationFrame(upd
 new MutationObserver(scheduleHints).observe(document.getElementById('content'),{childList:true,subtree:true});
 window.addEventListener('resize',scheduleHints);scheduleHints();
 
+// Keep chart values visible on hover and keyboard focus. SVG <title> remains as a native fallback.
+let chartTooltip;
+function getChartTooltip(){
+ if(chartTooltip)return chartTooltip;
+ chartTooltip=document.createElement('div');
+ chartTooltip.className='chart-tooltip';
+ chartTooltip.setAttribute('role','status');
+ chartTooltip.innerHTML='<div><span>X</span><strong></strong></div><div><span>Y</span><strong></strong></div>';
+ document.body.append(chartTooltip);
+ return chartTooltip;
+}
+function positionChartTooltip(x,y){
+ const tip=getChartTooltip(),gap=14;
+ tip.style.left=`${Math.max(8,Math.min(x+gap,window.innerWidth-tip.offsetWidth-8))}px`;
+ tip.style.top=`${Math.max(8,Math.min(y+gap,window.innerHeight-tip.offsetHeight-8))}px`;
+}
+function showChartTooltip(point,x,y){
+ const tip=getChartTooltip();
+ tip.querySelector('div:first-child strong').textContent=point.dataset.tooltipX||'—';
+ tip.querySelector('div:last-child strong').textContent=point.dataset.tooltipY||'—';
+ tip.classList.add('visible');
+ positionChartTooltip(x,y);
+}
+function hideChartTooltip(){chartTooltip?.classList.remove('visible');}
+document.addEventListener('pointerover',e=>{
+ const point=e.target.closest?.('[data-chart-tooltip]');
+ if(point)showChartTooltip(point,e.clientX,e.clientY);
+});
+document.addEventListener('pointermove',e=>{
+ const point=e.target.closest?.('[data-chart-tooltip]');
+ if(point)positionChartTooltip(e.clientX,e.clientY);
+});
+document.addEventListener('pointerout',e=>{
+ const point=e.target.closest?.('[data-chart-tooltip]');
+ if(point&&!point.contains(e.relatedTarget))hideChartTooltip();
+});
+document.addEventListener('focusin',e=>{
+ const point=e.target.closest?.('[data-chart-tooltip]');
+ if(point){const box=point.getBoundingClientRect();showChartTooltip(point,box.right,box.top);}
+});
+document.addEventListener('focusout',e=>{if(e.target.closest?.('[data-chart-tooltip]'))hideChartTooltip();});
+
 // An open tab retains its loaded archive until reload; surface new published dates.
 let checkingArchive=false;
 async function checkArchiveDate(){
@@ -56,4 +98,3 @@ async function checkArchiveDate(){
 window.addEventListener('focus',checkArchiveDate);
 document.addEventListener('visibilitychange',checkArchiveDate);
 setInterval(checkArchiveDate,60000);
-
