@@ -1,12 +1,12 @@
 # FloodLens release report
 
-Generated from release **20260916T201532Z-f7511284**.
+Generated from release **20260917T064252Z-1fce2f2a**.
 
 ## Coverage
 
-- Archive: **2016-01-01 to 2026-09-15** (UTC daily records).
+- Archive: **2016-01-01 to 2026-09-16** (UTC daily records).
 - Reference locations: **25** Sri Lankan districts / monitoring points.
-- Daily rows: **97,775**; valid discharge rows: **89,953**.
+- Daily rows: **97,800**; valid discharge rows: **89,976**.
 - Original hourly evidence: **2,346,600** rows (the compact deployable release stores daily data).
 - Detected episodes: **731** using the 99th-percentile signal rule.
 
